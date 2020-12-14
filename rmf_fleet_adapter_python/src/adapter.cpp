@@ -51,14 +51,14 @@ PYBIND11_MODULE(rmf_adapter, m) {
                    m, "RobotUpdateHandle")
         // Private constructor: Only to be constructed via FleetUpdateHandle!
         .def("interrupted", &agv::RobotUpdateHandle::interrupted)
-        .def("update_position",
+        .def("update_current_waypoint",
              py::overload_cast<std::size_t, double>(
                  &agv::RobotUpdateHandle::update_position),
              py::arg("waypoint"),
              py::arg("orientation"),
              py::call_guard<py::scoped_ostream_redirect,
                             py::scoped_estream_redirect>())
-        .def("update_position",
+        .def("update_current_lanes",
              py::overload_cast<const Eigen::Vector3d&,
                                const std::vector<std::size_t>& >(
                  &agv::RobotUpdateHandle::update_position),
@@ -66,7 +66,7 @@ PYBIND11_MODULE(rmf_adapter, m) {
              py::arg("lanes"),
              py::call_guard<py::scoped_ostream_redirect,
                             py::scoped_estream_redirect>())
-        .def("update_position",
+        .def("update_off_grid_position",
              py::overload_cast<const Eigen::Vector3d&,
                                std::size_t>(
                  &agv::RobotUpdateHandle::update_position),
@@ -74,7 +74,7 @@ PYBIND11_MODULE(rmf_adapter, m) {
              py::arg("target_waypoint"),
              py::call_guard<py::scoped_ostream_redirect,
                             py::scoped_estream_redirect>())
-        .def("update_position",
+        .def("update_lost_position",
              py::overload_cast<const std::string&,
                                const Eigen::Vector3d&,
                                const double,
@@ -119,7 +119,7 @@ PYBIND11_MODULE(rmf_adapter, m) {
     // Light wrappers
     py::class_<rclcpp::NodeOptions>(m, "NodeOptions");
     py::class_<rclcpp::Node, std::shared_ptr<rclcpp::Node> >(m, "Node")
-        .def("now", [&](rclcpp::Node& self){
+        .def("now", [](rclcpp::Node& self){
             return rmf_traffic_ros2::convert(self.now());
         });
 
@@ -145,7 +145,7 @@ PYBIND11_MODULE(rmf_adapter, m) {
         // .def("request_loop")      // Internally implemented, not exposed to end user
         .def("start", &agv::Adapter::start)
         .def("stop", &agv::Adapter::stop)
-        .def("now", [&](agv::test::MockAdapter& self) {
+        .def("now", [](agv::Adapter& self) {
             return TimePoint(rmf_traffic_ros2::convert(self.node()->now())
                                  .time_since_epoch());
         });
