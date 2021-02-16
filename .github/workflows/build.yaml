@@ -7,6 +7,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-20.04
+    container:
+      image: docker://ros:rolling-ros-base-focal
     steps:
     - name: non-ros-deps
       run: |
