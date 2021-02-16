@@ -1,3 +1,17 @@
+# Copyright 2021 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import os
 import re
 import sys
@@ -8,7 +22,7 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 package_name = "rmf_fleet_adapter_python"
 
 
@@ -77,9 +91,10 @@ class CMakeBuild(build_ext):
 setup(
     name=package_name,
     version=__version__,
-    packages=['rmf_fleet_adapter_python'],
-    package_dir={'rmf_fleet_adapter_python':
-                 'scripts/rmf_fleet_adapter_python'},
+    packages=[package_name],
+    package_dir={
+        package_name:'scripts'
+    },
     author='methylDragon',
     author_email='methylDragon@gmail.com',
     url='',
@@ -90,7 +105,12 @@ setup(
     cmdclass={'build_ext': CMakeBuild},
     zip_safe=False,
     entry_points={'console_scripts': [
-        'test_adapter = rmf_fleet_adapter_python.test_adapter:main'
+        f'test_adapter = {package_name}.test_adapter:main',
+        f'test_delivery = {package_name}.test_delivery:main',
+        f'test_loop = {package_name}.test_loop:main',
+        f'schedule_blockade_nodes = {package_name}.schedule_blockade_nodes:main',
+        f'dispatcher_node = {package_name}.dispatcher_node:main',
+        f'traffic_light = {package_name}.traffic_light:main'
     ]},
     license='Apache License, Version 2.0',
     install_requires=['setuptools'],
