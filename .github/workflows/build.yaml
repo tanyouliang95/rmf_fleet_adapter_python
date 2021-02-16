@@ -10,7 +10,7 @@ jobs:
     container:
       image: docker://ros:rolling-ros-base-focal
     steps:
-    - name: non-ros-deps
+    - name: download-deps
       run: |
         sudo apt update
         sudo apt install -y wget
@@ -19,8 +19,9 @@ jobs:
         sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
         sudo sh -c 'echo "deb http://rmf.servehttp.com/ubuntu/main/ `lsb_release -cs` main" > /etc/apt/sources.list.d/rmf.list'
         sudo apt update && sudo apt install \
-          git cmake python3-pydocstyle curl \
+          git cmake python3-pydocstyle curl libyaml-cpp-dev \
           ros-rolling-rmf-fleet-adapter \
+          ros-rolling-rmf-task-ros2 \
           ros-rolling-rmf-task-ros2 \
           -y
     - name: workspace
@@ -35,7 +36,7 @@ jobs:
       run: |
         cd rmf_ws
         source /opt/ros/rolling/setup.bash
-        colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DNO_DOWNLOAD_MODELS=True
+        colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
     # - name: Setup book
     #   uses: peaceiris/actions-mdbook@v1
     #   with:
