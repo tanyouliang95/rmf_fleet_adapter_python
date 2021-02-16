@@ -42,15 +42,10 @@ jobs:
       run: |
         cd rmf_ws/
         source install/setup.bash
-        bash src/rmf_fleet_adapter_python/docs/gen_docs.sh
-    - name: Deploy
+        cd src/rmf_fleet_adapter_python/docs
+        bash gen_docs.sh
+    - name: deploy_page
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./public
-    # - name: Setup book
-    #   uses: peaceiris/actions-mdbook@v1
-    #   with:
-    #     mdbook-version: 'latest'
-    # - run: cargo install mdbook-open-on-gh
-    # - run: mdbook build
+        publish_dir: rmf_ws/src/rmf_fleet_adapter_python/docs/

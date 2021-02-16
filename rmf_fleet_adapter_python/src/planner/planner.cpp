@@ -29,7 +29,7 @@ using TimePoint = std::chrono::time_point<std::chrono::system_clock,
 // We use system_clock::time_points in the bindings to simplify the Pythonside
 // types (so it casts to datetime.datetime instead of datetime.timedelta)
 Start make_start(TimePoint initial_time,
-                 std::_t initial_waypoint,
+                 std::size_t initial_waypoint,
                  double initial_orientation,
                  rmf_utils::optional<Eigen::Vector2d> location,
                  rmf_utils::optional<std::size_t> initial_lane)
