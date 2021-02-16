@@ -37,6 +37,12 @@ jobs:
         cd rmf_ws
         source /opt/ros/rolling/setup.bash
         colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+    - name: gen_docs
+      shell: bash
+      run: |
+        cd rmf_ws/
+        source install/setup.bash
+        bash src/rmf_fleet_adapter_python/docs/gen_docs.sh
     # - name: Setup book
     #   uses: peaceiris/actions-mdbook@v1
     #   with:
