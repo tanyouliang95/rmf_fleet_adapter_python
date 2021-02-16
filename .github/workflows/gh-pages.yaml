@@ -1,11 +1,9 @@
-name: build with simple test
+name: github pages
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [ master, test/setup-ci ]
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-20.04
     container:
       image: docker://ros:rolling-ros-base-focal
@@ -36,9 +34,15 @@ jobs:
         cd rmf_ws
         source /opt/ros/rolling/setup.bash
         colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
-    - name: test
+    - name: gen_docs
       shell: bash
       run: |
         cd rmf_ws/
         source install/setup.bash
-        colcon test --packages-select rmf_fleet_adapter_python
+        cd src/rmf_fleet_adapter_python/docs
+        bash gen_docs.sh
+    - name: deploy_page
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: rmf_ws/src/rmf_fleet_adapter_python/docs/
